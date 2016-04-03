@@ -581,6 +581,7 @@ class Renderer(object):
         # filters may work with then
         self.content  = parseString(self.files['content.xml'])
         self.styles   = parseString(self.files['styles.xml'])
+        self.meta     = parseString(self.files['meta.xml'])
         self.manifest = parseString(self.files['META-INF/manifest.xml'])
 
         # Render content.xml keeping just 'office:body' node.
@@ -593,10 +594,14 @@ class Renderer(object):
         # Render styles.xml
         self.styles = self._render_xml(self.styles, **kwargs)
 
+        # Render meta.xml
+        self.meta = self._render_xml(self.meta, **kwargs)
+
         self.log.debug('Template rendering finished')
 
         self.files['content.xml']           = self.content.toxml().encode('ascii', 'xmlcharrefreplace')
         self.files['styles.xml']            = self.styles.toxml().encode('ascii', 'xmlcharrefreplace')
+        self.files['meta.xml']              = self.meta.toxml().encode('ascii', 'xmlcharrefreplace')
         self.files['META-INF/manifest.xml'] = self.manifest.toxml().encode('ascii', 'xmlcharrefreplace')
 
         document = self._pack_document(self.files)
